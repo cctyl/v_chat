@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var exampleService = require("../../service/ExampleService") // service模块，用于操作数据库
 let R = require("../../utils/R") //响应工具类
 let upload = require("../../utils/upload") //上传工具类
 let path = require("path")  //路径处理模块
@@ -22,17 +21,17 @@ router.get('/', function (req, res, next) {
 router.get('/add', async function (req, res, next) {
 
     //操作service，注意，必须加上await，方法上也需要加上async
-    let doc = await exampleService.saveExample({
-        title: "33",
-        status: "22",
-        other: "11"
-    })
-    //响应时，统一使用res.json方法
-    //搭配响应工具类，快速生成响应数据
-    if (doc)
-        res.json(R.ok().setData(doc))
-    else
-        res.json(R.error().setCode(30001).setMessage("增加出错"))
+    // let doc = await exampleService.saveExample({
+    //     title: "33",
+    //     status: "22",
+    //     other: "11"
+    // })
+    // //响应时，统一使用res.json方法
+    // //搭配响应工具类，快速生成响应数据
+    // if (doc)
+    //     res.json(R.ok().setData(doc))
+    // else
+    //     res.json(R.error().setCode(30001).setMessage("增加出错"))
 });
 
 

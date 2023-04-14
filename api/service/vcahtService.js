@@ -1,4 +1,4 @@
-let exampleModel = require("../model/example")
+let vchatModel = require("../model/vchat")
 
 module.exports = {
 
@@ -6,20 +6,19 @@ module.exports = {
 
     /**
      * 保存自己
-     * @param exampleData
+     * @param vchatObj
      * @returns {Promise<unknown>}
      */
-    saveExample(exampleData) {
+    save(vchatObj) {
         return new Promise((resolve, reject) => {
-            let e = new exampleModel(exampleData)
-
+            console.log({...vchatObj})
+            let e = new vchatModel({...vchatObj})
             e.save(function (err,doc) {
                 if (err)
                     resolve(false)
                 else
                     resolve(doc)
             })
-
         })
     }
 }
