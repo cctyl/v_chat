@@ -51,8 +51,7 @@ app.use((req, res, next) => {
     //1.从请求头中拿到token
     try {
         let token = req.headers.authorization || '';
-        token = token.substring(7)
-        console.log("获得的token：" + token)
+        token = token.substring(7);
         //2.token非空判断
         if (token) {
             //3.解析token
@@ -79,7 +78,7 @@ app.use((req, res, next) => {
     } catch (e) {
         console.error(e.message)
     }
-})
+});
 
 
 //--------需要携带token访问 start----------
@@ -100,8 +99,7 @@ app.use(function (err, req, res, next) {
     if (err instanceof ValidationError) {
         return res.status(err.statusCode).json(err)
     }
-
-    return res.status(500).json(err)
+    return res.json(R.error().setCode(err.status || 500).setMessage(err.message))
 });
 
 // 全局异常处理
@@ -110,7 +108,7 @@ app.use(function (err, req, res, next) {
     //打印异常日志
     console.log(err);
     //发送错误响应
-    res.json(R.error().setCode(err.status || 500).setMessage(err.message))
+    return res.json(R.error().setCode(err.status || 500).setMessage(err.message))
 });
 
 process.env.PORT = port;

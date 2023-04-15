@@ -10,8 +10,6 @@ let R = require("../../utils/R");
  * 保存一条消息
  */
 router.post('/', async function (req, res, next) {
-    console.log(req.body)
-    let a = 10 /0
     let doc = await vcahtService.save(req.body)
     if (doc)
         res.json(R.ok().setData(doc))
@@ -25,12 +23,10 @@ router.post('/', async function (req, res, next) {
  */
 router.post('/list', async function (req, res, next) {
 
-    try {
-        await vcahtService.saveMany(req.body)
-        res.json(R.ok().setData(req.body.length))
-    } catch (error) {
-        res.json(R.error().setMessage(error.message))
-    }
+    await vcahtService.saveMany(req.body)
+    res.json(R.ok().setData(req.body.length))
+
+
 });
 
 /**
