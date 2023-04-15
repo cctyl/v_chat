@@ -3,15 +3,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PC from "../pages/PC"
 import Mobile from "../pages/Mobile"
-Vue.use(VueRouter) //vue-router本身是一个插件，需要注册
-
-
+//vue-router本身是一个插件，需要注册
+Vue.use(VueRouter)
 
 const router = new VueRouter({
     mode: 'history',
     routes:[
         //写一组一组的路由，每个路由都是一个配置对象
-
         {
             path:'/pc',
             component:PC,
@@ -19,9 +17,7 @@ const router = new VueRouter({
         {
             path: '/mobile',
             component: Mobile,
-
         }
-
     ]
 })
 //初始化时调用一次

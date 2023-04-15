@@ -13,10 +13,10 @@
 </template>
 
 <script>
+    import api from '../../api'
     export default {
         name: "mobile-index",
         data() {
-
             return {
                 config: {
                     /**
@@ -61,7 +61,8 @@
                         closeable: false
                     }
                 },
-                messages: [{
+                messages: [
+                    {
                     id: 0,
                     name: "张三",
                     content: {
@@ -156,7 +157,17 @@
 
             }
         },
+        mounted() {
+            this.init()
+        },
         methods: {
+            /**
+             * 初始化聊天记录
+             */
+            async init(){
+                let result = await api.getMessageByPage()
+                console.log(result)
+            },
             loadMore() {
                 console.log("加载更多...")
             },
