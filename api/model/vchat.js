@@ -20,7 +20,15 @@ var VchatSchema = mongoose.Schema({
     content:ContentSchema,
     type: String, // 文件类型:text|image|audio|video|file,
     isCancel:Boolean, // 控制该消息是否已经撤回,
-    time:String // 发送时间
+    time: {
+        type: String,
+        required: true
+    } // 发送时间
+},{
+    timestamps: {
+        createdAt: 'created',
+        updatedAt: 'updated'
+    }
 })
 
 // 第三个参数是数据库中集合的真实名字

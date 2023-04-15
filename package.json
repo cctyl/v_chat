@@ -5,7 +5,7 @@
   "main": "api/server.js",
   "scripts": {
     "test": "node api/test",
-    "start": "node api/bin/www"
+    "start": "nodemon api/bin/www"
   },
   "keywords": [],
   "author": "",

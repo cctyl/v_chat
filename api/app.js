@@ -9,7 +9,7 @@ const R = require("./utils/R");
 //参数错误解析
 const {ValidationError} = require('express-validation');
 const app = require("./config/expressApp");
-const port = 8080;
+const port = 8081;
 
 //------------------中间件配置区域-----------------------
 app.use(logger('dev'));
