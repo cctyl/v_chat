@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from "../config";
 
-let BASE_URL="http://100.64.0.1:8081"
+let BASE_URL=config.BASE_URL
 
 
 export default function ajax(url, data = {}, type = "GET") {

@@ -17,9 +17,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-//该路径应该是src外面的public
-app.use(express.static('public'));
-app.use("/file", express.static('file'));
 
 
 //----------------------一级路由配置区域  start-----------------------------
@@ -37,6 +34,9 @@ app.all("*", function (req, res, next) {
         next();
     }
 })
+//该路径以当前文件为对照，也就是以app.js作为对照
+app.use(express.static('../public'));
+app.use("/file", express.static('../file'));
 
 
 //--------不需要携带token访问 ----------
@@ -99,6 +99,7 @@ app.use(function (err, req, res, next) {
     if (err instanceof ValidationError) {
         return res.status(err.statusCode).json(err)
     }
+    console.log(err);
     return res.json(R.error().setCode(err.status || 500).setMessage(err.message))
 });
 

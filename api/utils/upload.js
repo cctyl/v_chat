@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
         let dataStr = moment().format('YYYYMMDD');
         console.log(dataStr)
         //1.1 拼接成一个目录，这种方式可以帮你处理中间的斜杠
-        let dir = path.join("public/uploads", dataStr)
+        let dir = path.join("../file/uploads", dataStr)
 
         //2. 按照日期生成图片存储目录
         //2.1先创建目录，因为多层级, 用一个第三方库来实现
