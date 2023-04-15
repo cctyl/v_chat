@@ -11,6 +11,7 @@ let R = require("../../utils/R");
  */
 router.post('/', async function (req, res, next) {
     console.log(req.body)
+    let a = 10 /0
     let doc = await vcahtService.save(req.body)
     if (doc)
         res.json(R.ok().setData(doc))
