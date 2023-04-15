@@ -80,13 +80,14 @@
                 },
                 messages: [],
                 fileList: [],
-                ip: ""
+                ip: "",
+                page: 1,
             }
         },
         async mounted() {
 
             await this.getMyIp()
-            this.init()
+            this.getMessage()
         },
         methods: {
             /**
@@ -104,14 +105,14 @@
                     };
                     // 发起 POST 请求
                     let loadToast = this.$toast.loading({
-                        message:"上传中...",
-                        duration:0
-                    })
+                        message: "上传中...",
+                        duration: 0
+                    });
                     let rawRes = await axios.post(properties.BASE_URL + '/open/example/upload', formData, config);
                     loadToast.clear();
                     if (rawRes.data.code === 20000) {
-                        this.$toast("上传成功")
-                        return properties.FILE_DOWN_URL+ rawRes.data.data;
+                        this.$toast("上传成功");
+                        return properties.FILE_DOWN_URL + rawRes.data.data;
                     } else {
                         this.$toast("上传失败")
                     }
@@ -124,29 +125,46 @@
              *
              */
             async getMyIp() {
-                let result = await api.getMyIp()
-                this.ip = result.data
+                let result = await api.getMyIp();
+                this.ip = result.data;
             },
             /**
-             * 初始化聊天记录
+             * 获取消息
              */
-            async init() {
-                let result = await api.getMessageByPage()
-                this.messages = result.data
-                this.messages = result.data.map((item) => {
+            async getMessage() {
+
+                console.log("当前页码为：" + this.page)
+                let result = await api.getMessageByPage(this.page, 10)
+                if (result.length === 0) {
+                    return;
+                }
+                if (!this.messages) {
+                    this.messages = []
+                }
+                //拼接数据
+                this.messages = this.messages.concat(result.data)
+
+                this.messages = this.messages.map((item) => {
                     if (item.ip === this.ip) {
                         item.self = true
                     }
                     return item
                 })
+            },
+            async loadMore() {
+                this.page++;
+                // 发起 POST 请求
+                let loadToast = this.$toast.loading({
+                    message: "加载中...",
+                    duration: 0
+                });
+                await this.getMessage()
+                loadToast.clear();
 
             },
-            loadMore() {
-                console.log("加载更多...")
-            },
             async submit(msg) {
-                console.log(msg)
-                let sendObj = {...msg}
+                console.log(msg);
+                let sendObj = {...msg};
                 sendObj.time = time.getNowDateStr();
 
                 sendObj.ip = this.ip;
@@ -161,36 +179,36 @@
                     fileSize: "", // 文件大小
                     fileExt: "", // 文件扩展名
                 };
-                sendObj.type = msg.type
+                sendObj.type = msg.type;
                 //判断类型 text|image|audio|video|file
                 switch (msg.type) {
                     case "text":
-                        sendObj.content.text = msg.content
+                        sendObj.content.text = msg.content;
                         break;
                     case "image":
                         sendObj.content.imageUrl = await this.upload(msg.content);
-                        this.setFileInfo(sendObj,msg.content)
+                        this.setFileInfo(sendObj, msg.content);
                         break;
                     case "audio":
                         sendObj.content.audioUrl = await this.upload(msg.content);
-                        this.setFileInfo(sendObj,msg.content)
+                        this.setFileInfo(sendObj, msg.content);
                         break;
                     case "video":
                         sendObj.content.videoUrl = await this.upload(msg.content);
-                        this.setFileInfo(sendObj,msg.content)
+                        this.setFileInfo(sendObj, msg.content);
                         break;
                     case "file":
                         sendObj.content.fileUrl = await this.upload(msg.content);
-                        this.setFileInfo(sendObj,msg.content)
+                        this.setFileInfo(sendObj, msg.content);
                         break;
 
                     default:
-                        console.error("不支持的类型" + msg.type)
+                        console.error("不支持的类型" + msg.type);
                         return;
                 }
                 //发送请求
-                let loadToast = this.$toast.loading()
-                let result = await api.sendMessage(sendObj)
+                let loadToast = this.$toast.loading();
+                let result = await api.sendMessage(sendObj);
                 loadToast.clear();
                 if (result.code !== 20000) {
                     this.$toast.fail({
@@ -220,10 +238,10 @@
                 }
             },
 
-             setFileInfo(sendObj,content){
+            setFileInfo(sendObj, content) {
                 sendObj.content.fileName = content.file.name
                 sendObj.content.fileSize = content.file.size
-                sendObj.content.fileExt =  content.file.name.split('.').pop();
+                sendObj.content.fileExt = content.file.name.split('.').pop();
             }
         }
     }
