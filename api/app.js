@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 //该路径应该是src外面的public
-app.use(express.static( 'public'));
-app.use("/file",express.static( 'file'));
+app.use(express.static('public'));
+app.use("/file", express.static('file'));
 
 
 //----------------------一级路由配置区域  start-----------------------------
@@ -48,30 +48,35 @@ require("./routes/open");
  */
 app.use((req, res, next) => {
     //1.从请求头中拿到token
-    let token = req.headers.token;
+    try {
+        let token = req.headers.authorization || '';
+        token = token.substring(7)
+        console.log("获得的token：" + token)
+        //2.token非空判断
+        if (token) {
+            //3.解析token
+            let result = jwt.decrypt(token);
 
-    //2.token非空判断
-    if (token) {
-        //3.解析token
-        let result = jwt.decrypt(token);
+            //4. 取出userid
+            let userId = result.userId;
 
-        //4. 取出userid
-        let userId = result.userId;
+            //5.判断userid是否存在，存在则解析成功，不存在则说明出错
+            if (userId) {
+                //6.解析成功则放入请求头
+                req.userId = userId;
 
-        //5.判断userid是否存在，存在则解析成功，不存在则说明出错
-        if (userId) {
-            //6.解析成功则放入请求头
-            req.userId = userId;
-
-            //7.放行到下一个方法
-            next();
+                //7.放行到下一个方法
+                next();
+            } else {
+                //解析失败，不放行，返回错误提示
+                res.json(R.error().setMessage(result.errmsg));
+            }
         } else {
-            //解析失败，不放行，返回错误提示
-            res.json(R.error().setMessage(result.errmsg));
+            //没携带token访问，不放行
+            res.json(R.error().setMessage("请登录后再访问"));
         }
-    } else {
-        //没携带token访问，不放行
-        res.json(R.error().setMessage("请登录后再访问"));
+    } catch (e) {
+        console.error(e.message)
     }
 })
 

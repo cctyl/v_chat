@@ -12,8 +12,6 @@ let R = require("../../utils/R");
 router.post('/', async function (req, res, next) {
     console.log(req.body)
     let doc = await vcahtService.save(req.body)
-    //响应时，统一使用res.json方法
-    //搭配响应工具类，快速生成响应数据
     if (doc)
         res.json(R.ok().setData(doc))
     else
@@ -25,6 +23,7 @@ router.post('/', async function (req, res, next) {
  * 保存多条消息
  */
 router.post('/list', async function (req, res, next) {
+
     try {
         await vcahtService.saveMany(req.body)
         res.json(R.ok().setData(req.body.length))
@@ -37,12 +36,10 @@ router.post('/list', async function (req, res, next) {
  * 保存多条消息
  */
 router.get('/list', async function (req, res, next) {
-
     let page = req.query.page || 1;
     let size = req.query.size || 10;
     let data = await vcahtService.pageFind(page, size);
     res.json(R.ok().setData().setData(data))
-
 });
 
 
