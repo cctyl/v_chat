@@ -4,12 +4,20 @@ const vcahtService = require('../../service/vcahtService');
 
 //响应工具类
 let R = require("../../utils/R");
+let ip = require("../../utils/ip");
 
+
+router.get('/getMyIp',  function (req, res, next) {
+    res.json(R.ok().setData(ip.getIp(req)))
+});
 
 /**
  * 保存一条消息
  */
 router.post('/', async function (req, res, next) {
+    let vchatObj = req.body
+    vchatObj.name = ip.getIp(req)
+    console.log(ip.getIp(req))
     let doc = await vcahtService.save(req.body)
     if (doc)
         res.json(R.ok().setData(doc))

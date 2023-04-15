@@ -25,5 +25,13 @@ export default {
         return ajax(`/auth/vchat/list?page=${page}&size=${size}`)
     },
 
-
+    /**
+     * 获取当前ip
+     * @param page
+     * @param size
+     * @returns {*}
+     */
+    getMyIp(page,size) {
+        return ajax(`/auth/vchat/getMyIp`)
+    },
 }

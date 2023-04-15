@@ -15,11 +15,12 @@ var ContentSchema = mongoose.Schema({
 var VchatSchema = mongoose.Schema({
     id: {
         type: String,
-        default: () => mongoose.Types.ObjectId()
+        default: () => mongoose.Types.ObjectId(),
+        unique: true
     }, // 唯一id
     name: String, // 姓名
     avatar: String, // 头像地址
-    self: Boolean, // 是否是自己
+    ip: String, // 发送ip
     content:ContentSchema,
     type: String, // 文件类型:text|image|audio|video|file,
     isCancel:Boolean, // 控制该消息是否已经撤回,

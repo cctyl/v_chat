@@ -16,6 +16,7 @@
 
     import api from '../../api'
     import time from "../../utils/time";
+
     export default {
         name: "mobile-index",
         data() {
@@ -64,42 +65,83 @@
                     }
                 },
                 messages: [],
-                fileList: []
-
+                fileList: [],
+                ip: ""
             }
         },
-        mounted() {
+        async mounted() {
+            await this.getMyIp()
             this.init()
         },
         methods: {
             /**
+             * 获取当前ip
+             *
+             */
+            async getMyIp() {
+                let result = await api.getMyIp()
+                this.ip = result.data
+            },
+            /**
              * 初始化聊天记录
              */
-            async init(){
+            async init() {
                 let result = await api.getMessageByPage()
                 this.messages = result.data
+                this.messages = result.data.map((item) => {
+                    if (item.ip === this.ip) {
+                        item.self = true
+                    }
+                    return item
+                })
+
             },
             loadMore() {
                 console.log("加载更多...")
             },
-           async submit(msg) {
+            async submit(msg) {
                 let sendObj = {...msg}
                 sendObj.time = time.getNowDateStr();
 
+                sendObj.ip = this.ip;
+                sendObj.content = {
+                    text: "", // 文本
+                    duration: "", // 时长
+                    imageUrl: "", // 图片地址
+                    videoUrl: "", // 视频地址
+                    audioUrl: "", // 音频地址
+                    fileUrl: "", // 文件地址
+                    fileName: "", // 文件名称
+                    fileSize: "", // 文件大小
+                    fileExt: "", // 文件扩展名
+                };
+                //判断类型
                 switch (msg.type) {
                     case "text":
-                        console.log("这是一条消息:"+msg.content);
+                        sendObj.content.text = msg.content
                         break;
                     default:
-                        throw new Error("不支持的类型"+msg.type)
+                        console.error("不支持的类型" + msg.type)
                 }
-                console.log("提交了..."+JSON.stringify(sendObj))
+                //发送请求
+                let loadToast  = this.$toast.loading()
                 let result = await api.sendMessage(sendObj)
-                if (result.code !== 200) {
+                loadToast.clear();
+                if (result.code !== 20000) {
                     this.$toast.fail({
-                        message:`发送失败${result.message}`
+                        message: `发送失败：${result.message}`,
+                        closeOnClickOverlay: true
                     });
+                } else {
+                    this.$toast.success({
+                        message: `发送成功`,
+                        closeOnClick: true,
+                        duration: 500
+                    });
+                    result.data.self =  true;
+                    this.messages.push(result.data)
                 }
+
             },
 
         }

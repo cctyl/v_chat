@@ -24,7 +24,7 @@ module.exports = {
      */
     pageFind(page, size) {
         return new Promise((resolve, reject) => {
-            vchatModel.find({}).skip( (page - 1) * size).limit(size*1).sort({'created':-1}).exec(callback(resolve,reject))
+            vchatModel.find({}).skip( (page - 1) * size).limit(size*1).sort({'created':1}).exec(callback(resolve,reject))
         })
     },
 
