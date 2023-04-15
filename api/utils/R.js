@@ -16,13 +16,13 @@ let code = {
 
 }
 
-function R() {
+function R(code,message,data) {
     //响应码
-    this.code = 200;
+    this.code = code;
     //响应信息
-    this.message = "";
+    this.message = message;
     //响应数据
-    this.data = {};
+    this.data = data;
 
     /**
      * 设置响应信息
@@ -52,28 +52,22 @@ function R() {
         this.data = data
         return this //返回自己，形成链式调用
     }
+
+
 }
 
 /**
  * 响应成功时调用的方法
  */
-function ok() {
-    let r = new R();
-    r.code = code.ok;
-    r.message = "成功"
-
-    return r;
+function ok(c = code.ok,message = "成功",data={}) {
+    return new R(c,message,data);
 }
 
 /**
  * 响应成功时调用的方法
  */
-function error() {
-    let r = new R();
-    r.code = code.error;
-    r.message = "失败"
-
-    return r;
+function error(c = code.error,message="失败",data={}) {
+    return new R(c,message,data);
 }
 
 

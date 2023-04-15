@@ -37,7 +37,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 await transcation.withTransaction(async () => {
-                  await  vchatModel.insertMany(vchatList)
+                  await vchatModel.insertMany(vchatList)
                 });
                 console.log('事务已提交');
                 resolve(true)
