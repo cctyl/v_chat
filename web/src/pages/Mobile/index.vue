@@ -103,7 +103,12 @@
                         headers: {'Content-Type': 'multipart/form-data'},
                     };
                     // 发起 POST 请求
+                    let loadToast = this.$toast.loading({
+                        message:"上传中...",
+                        duration:0
+                    })
                     let rawRes = await axios.post(properties.BASE_URL + '/open/example/upload', formData, config);
+                    loadToast.clear();
                     if (rawRes.data.code === 20000) {
                         this.$toast("上传成功")
                         return properties.FILE_DOWN_URL+ rawRes.data.data;
@@ -185,7 +190,6 @@
                 }
                 //发送请求
                 let loadToast = this.$toast.loading()
-                console.log(sendObj)
                 let result = await api.sendMessage(sendObj)
                 loadToast.clear();
                 if (result.code !== 20000) {
