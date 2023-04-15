@@ -142,7 +142,7 @@
                     this.messages = []
                 }
                 //拼接数据
-                this.messages = this.messages.concat(result.data)
+                this.messages =result.data.concat(this.messages)
 
                 this.messages = this.messages.map((item) => {
                     if (item.ip === this.ip) {

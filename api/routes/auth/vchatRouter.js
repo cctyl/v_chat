@@ -38,12 +38,12 @@ router.post('/list', async function (req, res, next) {
 });
 
 /**
- * 保存多条消息
+ * 分页查询消息
  */
 router.get('/list', async function (req, res, next) {
     let page = req.query.page || 1;
     let size = req.query.size || 10;
-    let data = await vcahtService.pageFind(page, size);
+    let data = (await vcahtService.pageFind(page, size)).sort((a,b)=>a.created - b.created );
     res.json(R.ok().setData().setData(data))
 });
 
