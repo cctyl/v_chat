@@ -8,12 +8,15 @@ var ContentSchema = mongoose.Schema({
     audioUrl: String, // 音频地址
     fileUrl: String, // 文件地址
     fileName: String, // 文件名称
-    fileSize: Number, // 文件大小
+    fileSize: String, // 文件大小
     fileExt: String, // 文件扩展名
 })
 
 var VchatSchema = mongoose.Schema({
-    id: String, // 唯一id
+    id: {
+        type: String,
+        default: () => mongoose.Types.ObjectId()
+    }, // 唯一id
     name: String, // 姓名
     avatar: String, // 头像地址
     self: Boolean, // 是否是自己
