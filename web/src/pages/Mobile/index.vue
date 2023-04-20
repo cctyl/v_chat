@@ -36,7 +36,7 @@
                         /**
                          * 上传大小最大值(kb)
                          */
-                        maxSize: 20480,
+                        maxSize: 204800,
                         /**
                          * 允许的文件类型
                          */
@@ -46,14 +46,14 @@
                      * 文件上传
                      */
                     file: {
-                        maxSize: 20480,
+                        maxSize: 204800,
                         accept: ['*']
                     },
                     /**
                      * 视频上传
                      */
                     video: {
-                        maxSize: 20480,
+                        maxSize: 204800,
                         accept: ['video/*']
                     },
                     /**

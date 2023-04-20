@@ -1,3 +1,3 @@
 const app = require("../../config/expressApp")
-const prefix = "/auth";
+const prefix = "/api/auth";
 app.use(prefix+'/vchat', require('./vchatRouter'));
