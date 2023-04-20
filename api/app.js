@@ -36,7 +36,7 @@ app.all("*", function (req, res, next) {
 })
 //该路径以当前文件为对照，也就是以app.js作为对照
 // app.use(express.static('../public'));
-app.use("/file", express.static('../file'));
+app.use("/api/file", express.static('../file'));
 
 
 //--------不需要携带token访问 ----------
