@@ -44,7 +44,7 @@ router.get('/list', async function (req, res, next) {
     let page = req.query.page || 1;
     let size = req.query.size || 10;
     let data = (await vcahtService.pageFind(page, size)).sort((a,b)=>a.created - b.created );
-    res.json(R.ok().setData().setData(data))
+    res.json(R.ok().setData(data))
 });
 
 

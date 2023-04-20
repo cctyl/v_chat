@@ -24,8 +24,11 @@ const router = new VueRouter({
 //然后，在每一次切换路由之前，执行一次这个方法
 //全局前置路由守卫
 router.beforeEach((to, from, next) => {
+
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
-    console.log("当前是否为手机访问:"+isMobile)
+    if (to.query.code){
+        localStorage.setItem('code',to.query.code)
+    }
     if (isMobile) {
         // 如果是手机访问，则跳转到/mobile路径
         if (to.path !== '/mobile') {

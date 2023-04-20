@@ -35,7 +35,7 @@ app.all("*", function (req, res, next) {
     }
 })
 //该路径以当前文件为对照，也就是以app.js作为对照
-app.use(express.static('../public'));
+// app.use(express.static('../public'));
 app.use("/file", express.static('../file'));
 
 
@@ -52,8 +52,14 @@ app.use((req, res, next) => {
     try {
         let token = req.headers.authorization || '';
         token = token.substring(7);
+        //临时测试
+        if (token!=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMzQ2LCJpYXQiOjE2ODE1NTY0NjUsImV4cCI6MTY4MjE2MTI2NX0.mPQDcZ289VolcFlx7NFQDt6R6RjYQJYCUBuBKOzKCew'){
+            return  res.json(R.error().setMessage('请携带token访问'));
+        }else {
+            next();
+        }
         //2.token非空判断
-        if (token) {
+/*        if (token) {
             //3.解析token
             let result = jwt.decrypt(token);
 
@@ -74,7 +80,7 @@ app.use((req, res, next) => {
         } else {
             //没携带token访问，不放行
             res.json(R.error().setMessage("请登录后再访问"));
-        }
+        }*/
     } catch (e) {
         console.error(e.message)
     }
