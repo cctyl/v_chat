@@ -1,16 +1,20 @@
 <template>
+    <div>
+        <m-chat
+                ref="mChat"
+                :messages="messages"
+                @submit="submit"
+                :loadMore="loadMore"
+                height="100vh"
+                :config="config"
+                :comment="true"
+                @extendItemClick="extendItemClick"
+                :imgMaxSize="204800" :videoMaxSize="204800" :fileMaxSize="204800"
+        >
+        </m-chat>
+    </div>
 
-    <m-chat
-            ref="mChat"
-            :messages="messages"
-            @submit="submit"
-            :loadMore="loadMore"
-            height="100vh"
-            :config="config"
-            :comment="true"
-            @extendItemClick="extendItemClick"
-    >
-    </m-chat>
+
 </template>
 
 <script>
@@ -33,10 +37,6 @@
                      */
                     image: {
                         /**
-                         * 上传大小最大值(kb)
-                         */
-                        maxSize: 204800,
-                        /**
                          * 允许的文件类型
                          */
                         accept: ['image/*']
@@ -45,14 +45,12 @@
                      * 文件上传
                      */
                     file: {
-                        maxSize: 204800,
                         accept: ['*']
                     },
                     /**
                      * 视频上传
                      */
                     video: {
-                        maxSize: 204800,
                         accept: ['video/*']
                     },
                     /**
@@ -65,16 +63,16 @@
                     imagePreviewConfig: {
                         closeable: false
                     },
-                    openExtends: ['custom'],
+                    openExtends: ['refresh'],
                     /**
                      * 需额外添加的扩展面板item
                      * 如需自定义图标参考vant-icon文档 https://vant-contrib.gitee.io/vant/v2/#/zh-CN/icon#zi-ding-yi-tu-biao
                      */
                     extendArr: [{
-                        type: "custom",
-                        text: "位置",
-                        icon: "location-o",
-                        classPrefix: 'van-icon',
+                        type: "refresh",
+                        text: "刷新",
+                        icon: "replay",
+                        classPrefix: 'van-icon'
                     },]
                 },
                 messages: [],
@@ -130,25 +128,31 @@
             /**
              * 获取消息
              */
-            async getMessage() {
-
-                console.log("当前页码为：" + this.page)
+            async getMessage(refresh, callback) {
                 let result = await api.getMessageByPage(this.page, 10)
                 if (result.length === 0) {
                     return;
                 }
+                //初始化数据
                 if (!this.messages) {
                     this.messages = []
                 }
-                //拼接数据
-                this.messages =result.data.concat(this.messages)
-
+                if (refresh) {
+                    //刷新数据
+                    this.messages = result.data
+                } else {
+                    //拼接数据
+                    this.messages = result.data.concat(this.messages)
+                }
                 this.messages = this.messages.map((item) => {
                     if (item.ip === this.ip) {
                         item.self = true
                     }
                     return item
-                })
+                });
+                if (callback) {
+                    callback()
+                }
             },
             async loadMore() {
                 this.page++;
@@ -159,13 +163,10 @@
                 });
                 await this.getMessage()
                 loadToast.clear();
-
             },
             async submit(msg) {
-                console.log(msg);
                 let sendObj = {...msg};
                 sendObj.time = time.getNowDateStr();
-
                 sendObj.ip = this.ip;
                 sendObj.content = {
                     text: "", // 文本
@@ -206,7 +207,7 @@
                         return;
                 }
                 //发送请求
-                let loadToast = this.$toast.loading();
+                let loadToast = this.loadToast();
                 let result = await api.sendMessage(sendObj);
                 loadToast.clear();
                 if (result.code !== 20000) {
@@ -225,21 +226,32 @@
                 }
 
             },
-
+            loadToast() {
+                return this.$toast.loading();
+            },
             /**
              * 自定义面板被点击了
              */
             extendItemClick(item) {
                 console.log('扩展面板item点击了', item)
-                if (item.type == 'custom') {
+                if (item.type === 'refresh') {
+                    let loadToast = this.loadToast();
+                    this.getMessage(true, () => {
+                        loadToast.clear()
+                    });
                     // 控制扩展面板显示和隐藏
                     this.$refs.mChat.toggleExtend();
                 }
             },
 
+            /**
+             * 设置文本数据
+             * @param sendObj
+             * @param content
+             */
             setFileInfo(sendObj, content) {
-                sendObj.content.fileName = content.file.name
-                sendObj.content.fileSize = content.file.size
+                sendObj.content.fileName = content.file.name;
+                sendObj.content.fileSize = content.file.size;
                 sendObj.content.fileExt = content.file.name.split('.').pop();
             }
         }
