@@ -1,7 +1,6 @@
 import axios from "axios";
-import config from "../config";
 
-let BASE_URL=config.BASE_URL
+let BASE_URL=process.env.VUE_APP_BASE_URL
 
 let code = localStorage.getItem('code')
 export default function ajax(url, data = {}, type = "GET") {

@@ -17,7 +17,6 @@
     import axios from "axios";
     import api from '../../api'
     import time from "../../utils/time";
-    import properties from "../../config";
     import fileUtil from "../../utils/fileUtil";
 
     export default {
@@ -108,11 +107,11 @@
                         message: "上传中...",
                         duration: 0
                     });
-                    let rawRes = await axios.post(properties.BASE_URL + '/open/example/upload', formData, config);
+                    let rawRes = await axios.post(process.env.VUE_APP_BASE_URL + '/open/example/upload', formData, config);
                     loadToast.clear();
                     if (rawRes.data.code === 20000) {
                         this.$toast("上传成功");
-                        return properties.FILE_DOWN_URL + rawRes.data.data;
+                        return process.env.VUE_APP_FILE_DOWN_URL + rawRes.data.data;
                     } else {
                         this.$toast("上传失败")
                     }
