@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-let sercret = "kvyte_1@sn284";
+const config = require('../config')
+let sercret = config.jwtKey
 const Token = {
     /**
      * 根据userId 获取token

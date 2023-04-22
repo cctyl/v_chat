@@ -2,3 +2,4 @@
 /public/*
 
 /web/dist/
+/api/config/index.js
