@@ -53,7 +53,7 @@ app.use((req, res, next) => {
         let token = req.headers.authorization || '';
         token = token.substring(7);
         //临时测试
-        if (token!=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMzQ2LCJpYXQiOjE2ODE1NTY0NjUsImV4cCI6MTY4MjE2MTI2NX0.mPQDcZ289VolcFlx7NFQDt6R6RjYQJYCUBuBKOzKCew'){
+        if (token!=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mPQDcZ289VolcFlx7NFQDt6R6RjYQJYCUBuBKOzKCew'){
             return  res.json(R.error().setMessage('请携带token访问'));
         }else {
             next();
