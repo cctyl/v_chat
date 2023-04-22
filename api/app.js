@@ -4,6 +4,7 @@ require('express-async-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const config = require('./config')
 //jwt生成
 const jwt = require("./utils/jwt");
 const R = require("./utils/R");
@@ -53,7 +54,7 @@ app.use((req, res, next) => {
         let token = req.headers.authorization || '';
         token = token.substring(7);
         //临时测试
-        if (token!=='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mPQDcZ289VolcFlx7NFQDt6R6RjYQJYCUBuBKOzKCew'){
+        if (token!==config.defaultToken){
             return  res.json(R.error().setMessage('请携带token访问'));
         }else {
             next();
