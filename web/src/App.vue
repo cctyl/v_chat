@@ -5,24 +5,22 @@
 </template>
 
 <script>
-
-    import vue from "./main";
-
+    import Vue from "vue";
     export default {
         name: 'App',
-        created () {
-            let code = this.$route.query.code;
-            if (code){
-                this.$toast(`获得code${code}`)
-                localStorage.setItem('code',code)
-            }else {
+        created() {
+            let code = localStorage.getItem("code");
+            if (code) {
+                this.$toast(`App获得code=${code}`)
+            } else {
                 this.$toast.fail({
-                    message: `code未获取成功,当前url=${window.location.href}`,
+                    message: `App获取code未成功,当前url=${window.location.href}`,
                     closeOnClickOverlay: true,
                     duration: 5000
                 });
-            }
 
+                this.$destroy()
+            }
         }
     }
 </script>

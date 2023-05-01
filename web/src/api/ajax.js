@@ -3,7 +3,6 @@ import axios from "axios";
 let BASE_URL=process.env.VUE_APP_BASE_URL
 import vue from "../main"
 
-let code = localStorage.getItem('code')
 export default function ajax(url, data = {}, type = "GET") {
     return new Promise(function (resolve, reject) {
         axios({
@@ -14,7 +13,7 @@ export default function ajax(url, data = {}, type = "GET") {
             withCredentials:true,
             //测试用
             headers:{
-                "Authorization":"Bearer "+code
+                "Authorization":"Bearer "+localStorage.getItem('code')
             }
 
         }).then(response => {
@@ -27,8 +26,8 @@ export default function ajax(url, data = {}, type = "GET") {
                 });
                 if (response.data.code === 20003 || response.data.code === 20001){
                     console.log("token过期")
-                    localStorage.removeItem("code")
-                    document.cookie = 'asiad_id_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    // localStorage.removeItem("code")
+                    // document.cookie = 'asiad_id_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                 }
                 reject(response.data)
             }

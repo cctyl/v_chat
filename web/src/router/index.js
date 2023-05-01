@@ -24,9 +24,21 @@ const router = new VueRouter({
 //然后，在每一次切换路由之前，执行一次这个方法
 //全局前置路由守卫
 router.beforeEach((to, from, next) => {
+
+
+    if (to.path==="/"){
+        let code = to.query.code;
+        if (code){
+            localStorage.setItem('code',code)
+            console.log("路径上code获取成功")
+        }else {
+            console.error(`code未获取成功,当前url=${window.location.href}`)
+        }
+    }
+
     let code = localStorage.getItem("code");
     if (!code){
-        console.log("未获得code")
+        console.error("vueRouter检查 未获得code")
         next(false)
     }else {
         // const isMobile =  /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
