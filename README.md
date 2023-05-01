@@ -69,7 +69,25 @@ https://github.com/cctyl/v_chat
 - openAi 一枚
 
   在项目编写过程中，大量的使用了openAi 进行查询、纠错、优化。另外，有5%的代码，是ai编写的，你能发现它吗？
+## 启动
+#### 前端
+```shell script
+#开发
+cd web
+npm run serve
 
+#打包
+npm run build
+
+```
+#### 后端
+```shell script
+# 开发
+npm start
+
+# 部署
+node ./api/bin/www --env=prod
+```
 ## 设计的细节
 
 - 每个设备之间的访问问题怎么解决？

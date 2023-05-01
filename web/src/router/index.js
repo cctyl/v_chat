@@ -25,10 +25,14 @@ const router = new VueRouter({
 //全局前置路由守卫
 router.beforeEach((to, from, next) => {
 
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
+
+
     if (to.query.code){
         localStorage.setItem('code',to.query.code)
     }
+
+    // const isMobile =  /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
+    const isMobile = true;
     if (isMobile) {
         // 如果是手机访问，则跳转到/mobile路径
         if (to.path !== '/mobile') {

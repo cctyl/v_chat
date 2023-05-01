@@ -5,25 +5,23 @@
  */
 const mongoose = require('mongoose');
 
+if (process.env.NODE_ENV==='prod'){
+    //有密码时
+    mongoose.connect('mongodb://admin:111@localhost:27017/vue_chat',function (err) {
 
-//有密码时
-// mongoose.connect('mongodb://账号:密码@localhost:27017/vue_chat',function (err) {
-//
-//     if (err)
-//         console.log(err)
-//     else
-//         console.log("数据库连接成功")
-// });
+        if (err)
+            console.log(err)
+        else
+            console.log("数据库连接成功")
+    });
+}else {
+    //无密码时：
+    mongoose.connect('mongodb://localhost:27017/vue_chat',function (err) {
 
-
-//无密码时：
-mongoose.connect('mongodb://localhost:27017/vue_chat',function (err) {
-
-    if (err)
-        console.log(err)
-    else
-        console.log("数据库连接成功")
-});
-
-
+        if (err)
+            console.log(err)
+        else
+            console.log("数据库连接成功")
+    });
+}
 module.exports = mongoose
