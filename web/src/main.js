@@ -17,7 +17,9 @@ Vue.use(Toast);
 import router from './router'
 Vue.config.productionTip = false
 
-new Vue({
+let vue = new Vue({
   render: h => h(App),
   router
-}).$mount('#app')
+}).$mount('#app');
+
+export default vue

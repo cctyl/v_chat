@@ -12,7 +12,7 @@ let code = {
     ok: 20000,//通用成功响应
     error: 20001,// 通用失败响应
     unregistered:20002,//未登陆响应
-
+    tokenExpire:20003,//token过期
 
 }
 

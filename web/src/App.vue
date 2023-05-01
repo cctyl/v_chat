@@ -6,8 +6,24 @@
 
 <script>
 
+    import vue from "./main";
+
     export default {
         name: 'App',
+        created () {
+            let code = this.$route.query.code;
+            if (code){
+                this.$toast(`获得code${code}`)
+                localStorage.setItem('code',code)
+            }else {
+                this.$toast.fail({
+                    message: `code未获取成功,当前url=${window.location.href}`,
+                    closeOnClickOverlay: true,
+                    duration: 5000
+                });
+            }
+
+        }
     }
 </script>
 

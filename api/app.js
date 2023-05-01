@@ -51,11 +51,13 @@ require("./routes/open");
 app.use((req, res, next) => {
     //1.从请求头中拿到token
     try {
-        let token = req.headers.authorization || '';
-        token = token.substring(7);
+        let token = req.headers.authorization?.substring(7) || '';
+        if (!token){
+            return  res.json(R.error().setMessage('请携带token访问'));
+        }
         //临时测试
         if (token!==config.defaultToken){
-            return  res.json(R.error().setMessage('请携带token访问'));
+            return  res.json(R.error().setMessage('token异常！').setCode(R.code.tokenExpire));
         }else {
             next();
         }

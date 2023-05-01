@@ -24,28 +24,27 @@ const router = new VueRouter({
 //然后，在每一次切换路由之前，执行一次这个方法
 //全局前置路由守卫
 router.beforeEach((to, from, next) => {
-
-
-
-    if (to.query.code){
-        localStorage.setItem('code',to.query.code)
-    }
-
-    // const isMobile =  /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
-    const isMobile = true;
-    if (isMobile) {
-        // 如果是手机访问，则跳转到/mobile路径
-        if (to.path !== '/mobile') {
-            next('/mobile')
+    let code = localStorage.getItem("code");
+    if (!code){
+        console.log("未获得code")
+        next(false)
+    }else {
+        // const isMobile =  /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
+        const isMobile = true;
+        if (isMobile) {
+            // 如果是手机访问，则跳转到/mobile路径
+            if (to.path !== '/mobile') {
+                next('/mobile')
+            } else {
+                next()
+            }
         } else {
-            next()
-        }
-    } else {
-        // 如果是PC浏览器访问，则跳转到/pc路径
-        if (to.path !== '/pc') {
-            next('/pc')
-        } else {
-            next()
+            // 如果是PC浏览器访问，则跳转到/pc路径
+            if (to.path !== '/pc') {
+                next('/pc')
+            } else {
+                next()
+            }
         }
     }
 })
