@@ -5,6 +5,11 @@ import MChat from 'D:\\temp\\m-chat-master\\lib-dist/m-chat.umd.min'
 Vue.use(MChat)
 
 
+
+import VConsole from 'vconsole';
+const vConsole = new VConsole();
+
+
 import { Toast } from 'vant';
 Vue.use(Toast);
 
