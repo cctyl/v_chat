@@ -286,7 +286,7 @@
              */
             setFileInfo(sendObj, content) {
                 sendObj.content.fileName = content.file.name;
-                sendObj.content.fileSize = content.file.size;
+                sendObj.content.fileSize = content.file.size/1024;
                 sendObj.content.fileExt = content.file.name.split('.').pop();
             }
         }

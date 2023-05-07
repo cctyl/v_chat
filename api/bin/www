@@ -6,7 +6,7 @@
 //const args = process.argv.slice(2);
 //const env = args.find(arg => arg.startsWith("--env="))?.split("=")[1] || "dev";
 //更新环境变量
-process.env.NODE_ENV='prod';
+process.env.NODE_ENV='dev';
 console.log(`当前环境：${process.env.NODE_ENV}`);
 
 var app = require('../app');
