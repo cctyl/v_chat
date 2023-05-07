@@ -22,6 +22,7 @@
     import api from '../../api'
     import time from "../../utils/time";
     import fileUtil from "../../utils/fileUtil";
+    import ajax from "../../api/ajax";
 
     export default {
         name: "mobile-index",
@@ -63,17 +64,25 @@
                     imagePreviewConfig: {
                         closeable: false
                     },
-                    openExtends: ['refresh'],
+                    openExtends: ['refresh','clear'],
                     /**
                      * 需额外添加的扩展面板item
                      * 如需自定义图标参考vant-icon文档 https://vant-contrib.gitee.io/vant/v2/#/zh-CN/icon#zi-ding-yi-tu-biao
                      */
-                    extendArr: [{
-                        type: "refresh",
-                        text: "刷新",
-                        icon: "replay",
-                        classPrefix: 'van-icon'
-                    },]
+                    extendArr: [
+                        {
+                            type: "refresh",
+                            text: "刷新",
+                            icon: "replay",
+                            classPrefix: 'van-icon'
+                        },
+                        {
+                            type: "clear",
+                            text: "清空",
+                            icon: "brush-o",
+                            classPrefix: 'van-icon'
+                        },
+                    ]
                 },
                 messages: [],
                 fileList: [],
@@ -109,7 +118,7 @@
                     loadToast.clear();
                     if (rawRes.data.code === 20000) {
                         this.$toast("上传成功");
-                        return process.env.VUE_APP_FILE_DOWN_URL + rawRes.data.data;
+                        return  rawRes.data.data;
                     } else {
                         this.$toast("上传失败")
                     }
@@ -148,6 +157,7 @@
                     if (item.ip === this.ip) {
                         item.self = true
                     }
+                    item.content.fileUrl =  process.env.VUE_APP_FILE_DOWN_URL + item.content.fileUrl
                     return item
                 });
                 if (callback) {
@@ -181,6 +191,7 @@
                 };
                 sendObj.type = msg.type;
                 //判断类型 text|image|audio|video|file
+                let tempUrl = ''
                 switch (msg.type) {
                     case "text":
                         sendObj.content.text = msg.content;
@@ -198,7 +209,9 @@
                         this.setFileInfo(sendObj, msg.content);
                         break;
                     case "file":
-                        sendObj.content.fileUrl = await this.upload(msg.content);
+                        tempUrl = await this.upload(msg.content);
+                        console.log("上传返回的url："+tempUrl);
+                        sendObj.content.fileUrl = tempUrl;
                         this.setFileInfo(sendObj, msg.content);
                         break;
 
@@ -226,6 +239,10 @@
                 }
 
             },
+            async clearMsg(){
+                let result = await api.clearAll()
+                console.log(result)
+            },
             loadToast() {
                 return this.$toast.loading();
             },
@@ -234,14 +251,32 @@
              */
             extendItemClick(item) {
                 console.log('扩展面板item点击了', item)
-                if (item.type === 'refresh') {
-                    let loadToast = this.loadToast();
-                    this.getMessage(true, () => {
-                        loadToast.clear()
-                    });
-                    // 控制扩展面板显示和隐藏
-                    this.$refs.mChat.toggleExtend();
+                switch (item.type) {
+                    case 'refresh':{
+                        let loadToast = this.loadToast();
+                        this.getMessage(true, () => {
+                            loadToast.clear()
+                        });
+
+                        break;
+                    }
+                    case 'clear':
+                        this.clearMsg().then(value => {
+                            this.$toast.success({
+                                message: `清理成功`,
+                                closeOnClick: true,
+                                duration: 500
+                            });
+                            this.getMessage(true);
+                        })
+
+                        break;
+                    default:
+                        console.error("未适配的类型："+item.type)
                 }
+
+                // 控制扩展面板显示和隐藏
+                this.$refs.mChat.toggleExtend();
             },
 
             /**

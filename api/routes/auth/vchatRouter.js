@@ -47,5 +47,14 @@ router.get('/list', async function (req, res, next) {
     res.json(R.ok().setData(data))
 });
 
+/**
+ * 清空
+ */
+router.put('/clear', async function (req, res, next) {
+
+    let data = await vcahtService.clearMsg();
+    res.json(R.ok().setData(data))
+});
+
 
 module.exports = router;

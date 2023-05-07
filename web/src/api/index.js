@@ -34,4 +34,12 @@ export default {
     getMyIp(page,size) {
         return ajax(`/auth/vchat/getMyIp`)
     },
+
+    /**
+     * 清空消息
+     * @returns {Promise | Promise<unknown>}
+     */
+    clearAll(){
+        return ajax(`/auth/vchat/clear`,{},'PUT')
+    }
 }

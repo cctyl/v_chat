@@ -47,5 +47,19 @@ module.exports = {
             }
 
         })
+    },
+
+    /**
+     * 清空消息
+     */
+    clearMsg(){
+        return new Promise(async (resolve, reject) => {
+                 vchatModel.deleteMany({}).then(result=>{
+                     resolve(true)
+                 }).catch(error=>{
+                     console.log(error)
+                     reject(error)
+                 })
+        })
     }
 }
